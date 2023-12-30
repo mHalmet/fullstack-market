@@ -26,8 +26,10 @@ const Page = () => {
     resolver: zodResolver(AuthCredentialsValidator),
   });
 
+  const { mutate, isLoading } = trpc.auth.createPayloadUser.useMutation({});
+
   const onSubmit = ({ email, password }: TAuthCredentialsValidator) => {
-    //send data to the server for verification
+    mutate({ email, password });
   };
 
   return (
@@ -50,7 +52,7 @@ const Page = () => {
           </div>
 
           <div className="grid gap-6">
-            <form onSubmit={() => null}>
+            <form onSubmit={handleSubmit(onSubmit)}>
               <div className="grid gap-2">
                 <div className="grid gap-1 py-2">
                   <Label htmlFor="email">Email</Label>
@@ -66,6 +68,7 @@ const Page = () => {
                   <Label htmlFor="email">Password</Label>
                   <Input
                     {...register("password")}
+                    type="password"
                     className={cn({
                       " focus-visible:ring-red-500": errors.password,
                     })}
